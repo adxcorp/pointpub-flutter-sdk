@@ -1,0 +1,72 @@
+
+import 'dart:async';
+
+import 'package:flutter/services.dart';
+
+import 'pointpub_sdk_platform_interface.dart';
+
+class PointpubSdk {
+
+  static const EventChannel eventChannel = EventChannel('pointpub_sdk/events');
+  StreamSubscription? _subscription;
+
+  PointpubSdk() {
+    startListening();
+  }
+
+  void startListening() {
+    _subscription = eventChannel.receiveBroadcastStream().listen(
+      _onEvent,
+      onError: _onError,
+    );
+  }
+
+  void dispose() {
+    _subscription?.cancel();
+    _subscription = null;
+  }
+
+  void _onEvent(dynamic event) {
+    // event는 Map 형태입니다.
+    if (event is Map) {
+      final type = event["event"];
+
+      switch (type) {
+        case "onOpenOfferWall":
+          print("오퍼월 열림");
+        case "onCloseOfferWall":
+          print("오퍼월 닫힘");
+        default:
+          print("알 수 없는 이벤트: $type");
+      }
+    }
+  }
+
+  void _onError(Object error) {
+    print("EventChannel error: $error");
+  }
+
+  Future<void> setAppId(String appId) {
+    return PointpubSdkPlatform.instance.setAppId(appId);
+  }
+
+  Future<void> setUserId(String userId) {
+    return PointpubSdkPlatform.instance.setUserId(userId);
+  }
+
+  Future<void> startOfferWall() {
+    return PointpubSdkPlatform.instance.startOfferWall();
+  }
+
+  Future<Map<String, dynamic>> getVirtualPoint() {
+    return PointpubSdkPlatform.instance.getVirtualPoint();
+  }
+
+  Future<Map<String, dynamic>> spendVirtualPoint(int point) {
+    return PointpubSdkPlatform.instance.spendVirtualPoint(point);
+  }
+
+  Future<String> getCompletedCampaign() {
+    return PointpubSdkPlatform.instance.getCompletedCampaign();
+  }
+}

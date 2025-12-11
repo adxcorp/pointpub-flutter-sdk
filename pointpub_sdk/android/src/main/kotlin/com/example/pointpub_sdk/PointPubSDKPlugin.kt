@@ -49,12 +49,12 @@ class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
                 result.success(null)
             }
             "startOfferWall" -> {
-                if (activity == null) {
+                val activity = activity ?: run {
                     result.error("NO_ACTIVITY", "Activity is null", null)
                     return
                 }
 
-                PointPub.startOfferWall(activity!!, object : OfferWallListener {
+                PointPub.startOfferWall(activity, object : OfferWallListener {
                     override fun onOpened() {
                         eventSink?.success(mapOf("event" to "onOpenOfferWall"))
                     }
@@ -66,12 +66,12 @@ class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
                 result.success(null)
             }
             "getVirtualPoint" -> {
-                if (activity == null) {
+                val activity = activity ?: run {
                     result.error("NO_ACTIVITY", "Activity is null", null)
                     return
                 }
 
-                PointPub.getVirtualPoint(activity!!, object : VirtualPointListener {
+                PointPub.getVirtualPoint(activity, object : VirtualPointListener {
                     override fun onSuccess(pointName: String, remainingPoint: Long) {
                         result.success(mapOf(
                             "pointName" to pointName,
@@ -85,18 +85,17 @@ class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
                 })
             }
             "spendVirtualPoint" -> {
-                if (activity == null) {
+                val activity = activity ?: run {
                     result.error("NO_ACTIVITY", "Activity is null", null)
                     return
                 }
 
-                val point = call.argument<Number>("point")?.toLong()
-                if (point == null) {
+                val point = call.argument<Number>("point")?.toLong() ?: run {
                     result.error("INVALID_ARGUMENT", "point is required", null)
                     return
                 }
 
-                PointPub.spendVirtualPoint(activity!!, point, object : VirtualPointListener {
+                PointPub.spendVirtualPoint(activity, point, object : VirtualPointListener {
                     override fun onSuccess(pointName: String, remainingPoint: Long) {
                         result.success(mapOf(
                             "pointName" to pointName,
@@ -110,12 +109,12 @@ class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
                 })
             }
             "getCompletedCampaign" -> {
-                if (activity == null) {
+                val activity = activity ?: run {
                     result.error("NO_ACTIVITY", "Activity is null", null)
                     return
                 }
 
-                PointPub.getParticipation(activity!!, apiInterface = object : ApiInterface {
+                PointPub.getParticipation(activity, apiInterface = object : ApiInterface {
                     override fun onResponse(code: Int, data: String) {
                         result.success(data)
                     }

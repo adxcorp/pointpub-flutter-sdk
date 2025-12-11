@@ -7,7 +7,7 @@ import 'pointpub_sdk_platform_interface.dart';
 
 class PointpubSdk {
 
-  static const EventChannel eventChannel = EventChannel('pointpub_sdk/events');
+  static const EventChannel _eventChannel = EventChannel('pointpub_sdk/events');
   StreamSubscription? _subscription;
 
   PointpubSdk() {
@@ -15,7 +15,7 @@ class PointpubSdk {
   }
 
   void startListening() {
-    _subscription = eventChannel.receiveBroadcastStream().listen(
+    _subscription = _eventChannel.receiveBroadcastStream().listen(
       _onEvent,
       onError: _onError,
     );
@@ -27,17 +27,16 @@ class PointpubSdk {
   }
 
   void _onEvent(dynamic event) {
-    // event는 Map 형태입니다.
     if (event is Map) {
       final type = event["event"];
 
       switch (type) {
         case "onOpenOfferWall":
-          print("오퍼월 열림");
+          print("[PointPub] OfferWall opened");
         case "onCloseOfferWall":
-          print("오퍼월 닫힘");
+          print("[PointPub] OfferWall closed");
         default:
-          print("알 수 없는 이벤트: $type");
+          print("[PointPub] unknown event: $type");
       }
     }
   }

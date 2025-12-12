@@ -2,23 +2,23 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'pointpub_sdk_method_channel.dart';
 
-abstract class PointpubSdkPlatform extends PlatformInterface {
+abstract class PointPubSDKPlatform extends PlatformInterface {
   /// Constructs a PointpubSdkPlatform.
-  PointpubSdkPlatform() : super(token: _token);
+  PointPubSDKPlatform() : super(token: _token);
 
   static final Object _token = Object();
 
-  static PointpubSdkPlatform _instance = MethodChannelPointpubSdk();
+  static PointPubSDKPlatform _instance = MethodChannelPointPubSDK();
 
-  /// The default instance of [PointpubSdkPlatform] to use.
+  /// The default instance of [PointPubSDKPlatform] to use.
   ///
-  /// Defaults to [MethodChannelPointpubSdk].
-  static PointpubSdkPlatform get instance => _instance;
+  /// Defaults to [MethodChannelPointPubSDK].
+  static PointPubSDKPlatform get instance => _instance;
 
   /// Platform-specific implementations should set this with their own
-  /// platform-specific class that extends [PointpubSdkPlatform] when
+  /// platform-specific class that extends [PointPubSDKPlatform] when
   /// they register themselves.
-  static set instance(PointpubSdkPlatform instance) {
+  static set instance(PointPubSDKPlatform instance) {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
   }

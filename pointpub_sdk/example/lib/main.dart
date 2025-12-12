@@ -16,7 +16,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _pointpubSdk = PointpubSdk();
+  final PointPubSDK _pointpubSdk = PointPubSDK();
   final ButtonStyle _buttonStyle = ElevatedButton.styleFrom(
     padding: const EdgeInsets.symmetric(vertical: 20),
     shape: RoundedRectangleBorder(

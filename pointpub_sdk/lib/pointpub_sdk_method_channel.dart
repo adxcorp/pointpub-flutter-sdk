@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 
 import 'pointpub_sdk_platform_interface.dart';
 
-/// An implementation of [PointpubSdkPlatform] that uses method channels.
-final class MethodChannelPointpubSdk extends PointpubSdkPlatform {
+/// An implementation of [PointPubSDKPlatform] that uses method channels.
+final class MethodChannelPointPubSDK extends PointPubSDKPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
   final methodChannel = const MethodChannel('pointpub_sdk');

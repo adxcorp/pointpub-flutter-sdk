@@ -5,12 +5,12 @@ import 'package:flutter/services.dart';
 
 import 'pointpub_sdk_platform_interface.dart';
 
-final class PointpubSdk {
+final class PointPubSDK {
 
   static const EventChannel _eventChannel = EventChannel('pointpub_sdk/events');
   StreamSubscription? _subscription;
 
-  PointpubSdk() {
+  PointPubSDK() {
     startListening();
   }
 
@@ -46,26 +46,26 @@ final class PointpubSdk {
   }
 
   Future<void> setAppId(String appId) {
-    return PointpubSdkPlatform.instance.setAppId(appId);
+    return PointPubSDKPlatform.instance.setAppId(appId);
   }
 
   Future<void> setUserId(String userId) {
-    return PointpubSdkPlatform.instance.setUserId(userId);
+    return PointPubSDKPlatform.instance.setUserId(userId);
   }
 
   Future<void> startOfferWall() {
-    return PointpubSdkPlatform.instance.startOfferWall();
+    return PointPubSDKPlatform.instance.startOfferWall();
   }
 
   Future<Map<String, dynamic>> getVirtualPoint() {
-    return PointpubSdkPlatform.instance.getVirtualPoint();
+    return PointPubSDKPlatform.instance.getVirtualPoint();
   }
 
   Future<Map<String, dynamic>> spendVirtualPoint(int point) {
-    return PointpubSdkPlatform.instance.spendVirtualPoint(point);
+    return PointPubSDKPlatform.instance.spendVirtualPoint(point);
   }
 
   Future<String> getCompletedCampaign() {
-    return PointpubSdkPlatform.instance.getCompletedCampaign();
+    return PointPubSDKPlatform.instance.getCompletedCampaign();
   }
 }

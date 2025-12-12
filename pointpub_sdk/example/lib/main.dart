@@ -16,70 +16,80 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final pointpubSdk = PointpubSdk();
+  final _pointpubSdk = PointpubSdk();
+  final ButtonStyle _buttonStyle = ElevatedButton.styleFrom(
+    padding: const EdgeInsets.symmetric(vertical: 20),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+  );
+  late final List<ActionItem> _buttons;
 
   @override
   void initState() {
     super.initState();
+    setActionButtonItems();
     setPointPubSDK();
   }
 
   @override
   void dispose() {
-    pointpubSdk.dispose();
+    _pointpubSdk.dispose();
     super.dispose();
   }
 
+  void setActionButtonItems() {
+    _buttons = [
+      ActionItem(
+        label: '오퍼월 시작하기',
+        onPressed: () {
+          startOfferWall();
+        },
+      ),
+      ActionItem(
+        label: '포인트 가져오기',
+        onPressed: () {
+          getVirtualPoint();
+        },
+      ),
+      ActionItem(
+        label: '포인트 사용하기',
+        onPressed: () {
+          spendVirtualPoint(10);
+        },
+      ),
+      ActionItem(
+        label: '완료된 캠페인 가져오기',
+        onPressed: () {
+          getCompletedCampaign();
+        },
+      ),
+    ];
+  }
+
   Future<void> setPointPubSDK() async {
-    await pointpubSdk.setAppId("APP_17569663893761798");
-    await pointpubSdk.setUserId("123456789");
+    await _pointpubSdk.setAppId("APP_17569663893761798");
+    await _pointpubSdk.setUserId("123456789");
   }
 
   Future<void> startOfferWall() async {
-    await pointpubSdk.startOfferWall();
+    await _pointpubSdk.startOfferWall();
   }
 
   Future<void> getVirtualPoint() async {
-    final result = await pointpubSdk.getVirtualPoint();
+    final result = await _pointpubSdk.getVirtualPoint();
     print('포인트명: ${result["pointName"]}, 남은 포인트: ${result["point"]}');
   }
 
   Future<void> spendVirtualPoint(int point) async {
-    final result = await pointpubSdk.spendVirtualPoint(point);
+    final result = await _pointpubSdk.spendVirtualPoint(point);
     print('포인트명: ${result["pointName"]}, 사용 후 남은 포인트: ${result["point"]}');
   }
 
   Future<void> getCompletedCampaign() async {
-    final result = await pointpubSdk.getCompletedCampaign();
+    final result = await _pointpubSdk.getCompletedCampaign();
     print(result);
   }
-
-  late final List<ActionButton> _buttons = [
-    ActionButton(
-      label: "오퍼월 시작하기",
-      onPressed: () {
-        startOfferWall();
-      },
-    ),
-    ActionButton(
-      label: "포인트 가져오기",
-      onPressed: () {
-        getVirtualPoint();
-      },
-    ),
-    ActionButton(
-      label: "포인트 사용하기",
-      onPressed: () {
-        spendVirtualPoint(10);
-      },
-    ),
-    ActionButton(
-      label: "완료된 캠페인 가져오기",
-      onPressed: () {
-        getCompletedCampaign();
-      },
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -88,27 +98,21 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('PointPubSDK Example App'),
         ),
-        body: Center(
+        body: Padding(
+          padding: const EdgeInsets.all(20),
           child: ListView.separated(
-            padding: const EdgeInsets.all(20),
             itemCount: _buttons.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 16),
             itemBuilder: (context, index) {
               final item = _buttons[index];
-
-              return ElevatedButton(
+              return ActionButton(
+                label: item.label,
                 onPressed: item.onPressed,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(item.label),
+                style: _buttonStyle,
               );
             },
-            separatorBuilder: (_, _) => const SizedBox(height: 16),
           ),
-        )
+        ),
       ),
     );
   }

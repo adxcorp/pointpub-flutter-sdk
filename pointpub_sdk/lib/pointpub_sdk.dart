@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'pointpub_sdk_platform_interface.dart';
 
-class PointpubSdk {
+final class PointpubSdk {
 
   static const EventChannel _eventChannel = EventChannel('pointpub_sdk/events');
   StreamSubscription? _subscription;

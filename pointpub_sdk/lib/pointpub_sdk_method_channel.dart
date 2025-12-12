@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'pointpub_sdk_platform_interface.dart';
 
 /// An implementation of [PointpubSdkPlatform] that uses method channels.
-class MethodChannelPointpubSdk extends PointpubSdkPlatform {
+final class MethodChannelPointpubSdk extends PointpubSdkPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
   final methodChannel = const MethodChannel('pointpub_sdk');
@@ -26,19 +26,19 @@ class MethodChannelPointpubSdk extends PointpubSdkPlatform {
 
   @override
   Future<Map<String, dynamic>> getVirtualPoint() async {
-    final result = await methodChannel.invokeMethod("getVirtualPoint");
-    return Map<String, dynamic>.from(result);
+    final virtualPoint = await methodChannel.invokeMethod("getVirtualPoint");
+    return Map<String, dynamic>.from(virtualPoint);
   }
 
   @override
   Future<Map<String, dynamic>> spendVirtualPoint(int point) async {
-    final result = await methodChannel.invokeMethod("spendVirtualPoint", { "point": point } );
-    return Map<String, dynamic>.from(result);
+    final virtualPoint = await methodChannel.invokeMethod("spendVirtualPoint", { "point": point } );
+    return Map<String, dynamic>.from(virtualPoint);
   }
 
   @override
   Future<String> getCompletedCampaign() async {
-    final result = await methodChannel.invokeMethod("getCompletedCampaign");
-    return result;
+    final completedCampaign = await methodChannel.invokeMethod("getCompletedCampaign");
+    return completedCampaign;
   }
 }

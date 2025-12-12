@@ -5,27 +5,30 @@ import PointPubSDK
 // MARK: - PointPubSDKListener
 
 fileprivate class PointPubSDKListener: NSObject, PointPubDelegate {
-
-    let onOpen: (() -> Void)?
-    let onClose: (() -> Void)?
-
-    init(onOpen: @escaping () -> Void, onClose: @escaping () -> Void) {
-        self.onOpen = onOpen
-        self.onClose = onClose
-    }
-
-    func onOpenOfferwall() {
-        onOpen?()
-    }
-
-    func onCloseOfferwall() {
-        onClose?()
-    }
+  
+  enum OfferWallEvent {
+    case opened
+    case closed
+  }
+  
+  private let handler: (OfferWallEvent) -> Void
+  
+  init(handler: @escaping (OfferWallEvent) -> Void) {
+    self.handler = handler
+  }
+  
+  func onOpenOfferwall() {
+    handler(.opened)
+  }
+  
+  func onCloseOfferwall() {
+    handler(.closed)
+  }
 }
 
 // MARK: - PointpubSdkPlugin
 
-public class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
+public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
   
   // MARK: - PointPubAPI
   
@@ -50,12 +53,7 @@ public class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
   override init() {
     super.init()
     
-    pointpubListener = PointPubSDKListener(onOpen: { [weak self] in
-      self?.eventSink?(["event": "onOpenOfferWall"])
-    }, onClose: { [weak self] in
-      self?.eventSink?(["event": "onCloseOfferWall"])
-    })
-    PointPub.delegate = pointpubListener
+    setListener()
   }
   
   // MARK: - Regist
@@ -73,6 +71,20 @@ public class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     let instance = PointPubSDKPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
     eventChannel.setStreamHandler(instance)
+  }
+  
+  private func setListener() {
+    pointpubListener = PointPubSDKListener { [weak self] event in
+      guard let self = self else { return }
+      switch event {
+      case .opened:
+        self.eventSink?(["event": "onOpenOfferWall"])
+        
+      case .closed:
+        self.eventSink?(["event": "onCloseOfferWall"])
+      }
+    }
+    PointPub.delegate = pointpubListener
   }
   
   // MARK: - Method Channel

@@ -23,6 +23,10 @@ abstract class PointPubSDKPlatform extends PlatformInterface {
     _instance = instance;
   }
 
+  Future<void> checkTrackingAndRequestIfNeeded() {
+    throw UnimplementedError('checkTrackingAndRequestIfNeeded() has not been implemented.');
+  }
+
   Future<void> setAppId(String appId) {
     throw UnimplementedError('setAppId() has not been implemented.');
   }

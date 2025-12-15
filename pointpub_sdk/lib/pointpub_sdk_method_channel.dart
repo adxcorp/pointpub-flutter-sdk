@@ -10,6 +10,11 @@ final class MethodChannelPointPubSDK extends PointPubSDKPlatform {
   final methodChannel = const MethodChannel('pointpub_sdk');
 
   @override
+  Future<void> checkTrackingAndRequestIfNeeded() async {
+    await methodChannel.invokeMethod("checkTrackingAndRequestIfNeeded");
+  }
+
+  @override
   Future<void> setAppId(String appId) async {
     await methodChannel.invokeMethod("setAppId", {'appId': appId} );
   }

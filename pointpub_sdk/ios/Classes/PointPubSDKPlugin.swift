@@ -33,6 +33,7 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
   // MARK: - PointPubAPI
   
   enum PointPubAPI: String {
+    case checkTrackingAndRequestIfNeeded = "checkTrackingAndRequestIfNeeded"
     case setAppId = "setAppId"
     case setUserId = "setUserId"
     case startOfferWall = "startOfferWall"
@@ -92,6 +93,11 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     let method = PointPubAPI(rawValue: call.method)
     switch method {
+    case .checkTrackingAndRequestIfNeeded:
+      let isTrackingEnabled = PointPub.isTrackingEnabled()
+      if !isTrackingEnabled {
+        PointPub.requestTrackingPermission { _ in }
+      }
     case .setAppId:
       if let args = call.arguments as? [String: Any], let appId = args["appId"] as? String {
         PointPub.setAppId(with: appId)

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:pointpub_sdk/pointpub_sdk.dart';
 import 'package:pointpub_sdk_example/ActionButton.dart';
@@ -70,6 +71,10 @@ class _MyAppState extends State<MyApp> {
   Future<void> setPointPubSDK() async {
     await _pointpubSdk.setAppId("APP_17569663893761798");
     await _pointpubSdk.setUserId("123456789");
+
+    if (Platform.isIOS) {
+      await _pointpubSdk.checkTrackingAndRequestIfNeeded();
+    }
   }
 
   Future<void> startOfferWall() async {

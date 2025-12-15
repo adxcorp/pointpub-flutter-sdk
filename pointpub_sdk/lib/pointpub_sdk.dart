@@ -45,6 +45,10 @@ final class PointPubSDK {
     print("EventChannel error: $error");
   }
 
+  Future<void> checkTrackingAndRequestIfNeeded() {
+    return PointPubSDKPlatform.instance.checkTrackingAndRequestIfNeeded();
+  }
+
   Future<void> setAppId(String appId) {
     return PointPubSDKPlatform.instance.setAppId(appId);
   }

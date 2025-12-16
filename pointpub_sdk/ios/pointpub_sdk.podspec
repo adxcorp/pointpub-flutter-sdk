@@ -16,7 +16,7 @@ A new Flutter plugin project.
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'pointpub-ios','2.0.0'
+  s.dependency 'pointpub-ios','2.0.1'
   s.platform = :ios, '13.0'
 
   # Flutter.framework does not contain a i386 slice.

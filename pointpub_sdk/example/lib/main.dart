@@ -35,7 +35,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
-    _pointpubSdk.dispose();
     super.dispose();
   }
 
@@ -103,22 +102,28 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('PointPubSDK Example App'),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(20),
-          child: ListView.separated(
-            itemCount: _buttons.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 16),
-            itemBuilder: (context, index) {
-              final item = _buttons[index];
-              return ActionButton(
-                label: item.label,
-                onPressed: item.onPressed,
-                style: _buttonStyle,
-              );
-            },
-          ),
+        body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: _buttonListWidget(),
+            )
         ),
       ),
+    );
+  }
+
+  Widget _buttonListWidget() {
+    return ListView.separated(
+      itemCount: _buttons.length,
+      separatorBuilder: (_, _) => const SizedBox(height: 16),
+      itemBuilder: (context, index) {
+        final item = _buttons[index];
+        return ActionButton(
+          label: item.label,
+          onPressed: item.onPressed,
+          style: _buttonStyle,
+        );
+      },
     );
   }
 }

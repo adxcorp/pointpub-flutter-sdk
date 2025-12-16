@@ -1,29 +1,41 @@
 
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'pointpub_sdk_platform_interface.dart';
 
-final class PointPubSDK {
+final class PointPubSDK with WidgetsBindingObserver {
 
   static const EventChannel _eventChannel = EventChannel('pointpub_sdk/events');
+  static final PointPubSDK _instance = PointPubSDK._internal();
+  factory PointPubSDK() => _instance;
   StreamSubscription? _subscription;
 
-  PointPubSDK() {
-    startListening();
+  PointPubSDK._internal() {
+    WidgetsBinding.instance.addObserver(this);
+    _startListening();
   }
 
-  void startListening() {
-    _subscription = _eventChannel.receiveBroadcastStream().listen(
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) {
+      _disposeInternal();
+    }
+  }
+
+  void _startListening() {
+    _subscription ??= _eventChannel.receiveBroadcastStream().listen(
       _onEvent,
       onError: _onError,
     );
   }
 
-  void dispose() {
+  void _disposeInternal() {
     _subscription?.cancel();
     _subscription = null;
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   void _onEvent(dynamic event) {
@@ -42,7 +54,7 @@ final class PointPubSDK {
   }
 
   void _onError(Object error) {
-    print("EventChannel error: $error");
+    print("[PointPub] EventChannel error: $error");
   }
 
   Future<void> checkTrackingAndRequestIfNeeded() {

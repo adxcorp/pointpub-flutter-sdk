@@ -16,34 +16,58 @@ final class MethodChannelPointPubSDK extends PointPubSDKPlatform {
 
   @override
   Future<void> setAppId(String appId) async {
-    await methodChannel.invokeMethod("setAppId", {'appId': appId} );
+    try {
+      return await methodChannel.invokeMethod("setAppId", {'appId': appId} );
+    } on PlatformException catch (e) {
+      throw Exception(e.message);
+    }
   }
 
   @override
   Future<void> setUserId(String userId) async {
-    await methodChannel.invokeMethod("setUserId", {'userId': userId} );
+    try {
+      return await methodChannel.invokeMethod("setUserId", {'userId': userId} );
+    } on PlatformException catch (e) {
+      throw Exception(e.message);
+    }
   }
 
   @override
   Future<void> startOfferWall() async {
-    await methodChannel.invokeMethod("startOfferWall");
+    try {
+      return await methodChannel.invokeMethod("startOfferWall");
+    } on PlatformException catch (e) {
+      throw Exception(e.message);
+    }
   }
 
   @override
   Future<Map<String, dynamic>> getVirtualPoint() async {
-    final virtualPoint = await methodChannel.invokeMethod("getVirtualPoint");
-    return Map<String, dynamic>.from(virtualPoint);
+    try {
+      final virtualPoint =  await methodChannel.invokeMethod('getVirtualPoint');
+      return Map<String, dynamic>.from(virtualPoint);
+    } on PlatformException catch (e) {
+      throw Exception(e.message);
+    }
   }
 
   @override
   Future<Map<String, dynamic>> spendVirtualPoint(int point) async {
-    final virtualPoint = await methodChannel.invokeMethod("spendVirtualPoint", { "point": point } );
-    return Map<String, dynamic>.from(virtualPoint);
+    try {
+      final virtualPoint = await methodChannel.invokeMethod("spendVirtualPoint", { "point": point } );
+      return Map<String, dynamic>.from(virtualPoint);
+    } on PlatformException catch (e) {
+      throw Exception(e.message);
+    }
   }
 
   @override
   Future<String> getCompletedCampaign() async {
-    final completedCampaign = await methodChannel.invokeMethod("getCompletedCampaign");
-    return completedCampaign;
+    try {
+      final completedCampaign = await methodChannel.invokeMethod("getCompletedCampaign");
+      return completedCampaign;
+    } on PlatformException catch (e) {
+      throw Exception(e.message);
+    }
   }
 }

@@ -75,10 +75,6 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     setListener()
   }
   
-  deinit {
-    PointPub.delegate = nil
-  }
-  
   // MARK: - Register
 
   public static func register(with registrar: FlutterPluginRegistrar) {
@@ -179,26 +175,22 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
   
   public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
     eventSink = events
-    // 이벤트 구독이 시작되었을 때 delegate가 해제되어 있었다면 재설정
     setListener()
     return nil
   }
 
   public func onCancel(withArguments arguments: Any?) -> FlutterError? {
     eventSink = nil
-    // 명시적 정리
     PointPub.delegate = nil
     return nil
   }
   
   // MARK: - Helpers (Arguments / Results / Presentation)
   
-  // 타입-세이프 인자 추출
   private func extract<T>(_ call: FlutterMethodCall, key: String) -> T? {
     (call.arguments as? [String: Any])?[key] as? T
   }
   
-  // 항상 메인에서 result 호출
   private func sendResultOnMain(
     _ result: @escaping FlutterResult,
     value: Any?
@@ -219,7 +211,6 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     }
   }
   
-  // 공통 비동기 실행 래퍼: 에러를 FlutterError로 변환해 메인에서 반환
   private func runAsync(
     _ result: @escaping FlutterResult,
     errorCode: String,
@@ -237,7 +228,6 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     }
   }
 
-  // 현재 표시 가능한 루트 VC 획득
   private func currentRootViewController() -> UIViewController? {
     UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController
   }

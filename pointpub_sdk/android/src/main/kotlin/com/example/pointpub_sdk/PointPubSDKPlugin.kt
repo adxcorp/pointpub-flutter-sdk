@@ -28,6 +28,22 @@ class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
     const val GET_COMPLETED_CAMPAIGN = "getCompletedCampaign"
   }
 
+  private object ErrorCode {
+    const val setAppIdFailed = "SET_APP_ID_FAILED"
+    const val setUserIdFailed = "SET_USER_ID_FAILED"
+    const val getActivityFailed = "GET_ACTIVITY_FAILED"
+    const val getVirtualPointFailed = "GET_VIRTUAL_POINT_FAILED"
+    const val spendVirtualPointFailed = "SPEND_VIRTUAL_POINT_FAILED"
+    const val getCompletedCampaignFailed = "GET_COMPLETED_CAMPAIGN_FAILED"
+  }
+
+  private object ErrorMessage {
+    const val missingAppId = "[PointPub] Missing appId: The 'appId' argument was not provided or is empty"
+    const val missingUserId = "[PointPub] Missing userId: The 'userId' argument was not provided or is empty"
+    const val missingPoint = "[PointPub] Missing point: The 'point' argument was not provided or is empty. Pass a positive integer value for 'point' to spendVirtualPoint"
+    const val invalidPresentationContext = "[PointPub] Invalid presentation context: Activity is null or not in a valid lifecycle state. Call startOfferWall after the Activity is fully created and resumed"
+  }
+
   private lateinit var channel: MethodChannel
   private var eventSink: EventChannel.EventSink? = null
   private var eventChannel: EventChannel? = null
@@ -49,7 +65,7 @@ class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
     when (call.method) {
       Methods.SET_APP_ID -> {
         val appId = call.argument<String>("appId") ?: run {
-          result.error("INVALID_ARGUMENT", "appId is required", null)
+          result.error(ErrorCode.setAppIdFailed, ErrorMessage.missingAppId, null)
           return
         }
 
@@ -59,7 +75,7 @@ class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
 
       Methods.SET_USER_ID -> {
         val userId = call.argument<String>("userId") ?: run {
-          result.error("INVALID_ARGUMENT", "userId is required", null)
+          result.error(ErrorCode.setUserIdFailed, ErrorMessage.missingUserId, null)
           return
         }
         PointPub.setUserId(userId)
@@ -91,14 +107,14 @@ class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
           }
 
           override fun onFailure(reason: String) {
-            result.error("FAILURE", reason, null)
+            result.error(ErrorCode.getVirtualPointFailed, reason, null)
           }
         })
       }
 
       Methods.SPEND_VIRTUAL_POINT -> withActivity(result) { activity ->
         val point = call.argument<Number>("point")?.toLong() ?: run {
-          result.error("INVALID_ARGUMENT", "point is required", null)
+          result.error(ErrorCode.spendVirtualPointFailed, ErrorMessage.missingPoint, null)
           return
         }
 
@@ -113,7 +129,7 @@ class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
           }
 
           override fun onFailure(reason: String) {
-            result.error("FAILURE", reason, null)
+            result.error(ErrorCode.spendVirtualPointFailed, reason, null)
           }
         })
       }
@@ -121,7 +137,11 @@ class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
       Methods.GET_COMPLETED_CAMPAIGN -> withActivity(result) { activity ->
         PointPub.getParticipation(activity, apiInterface = object : ApiInterface {
           override fun onResponse(code: Int, data: String) {
-            result.success(data)
+            if (code == 0) {
+              result.success(data)
+            } else {
+              result.error(ErrorCode.getCompletedCampaignFailed, data, null)
+            }
           }
         })
       }
@@ -165,7 +185,7 @@ class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamH
     block: (Activity) -> Unit
   ) {
     val activity = activity ?: run {
-      result.error("NO_ACTIVITY", "Activity is null", null)
+      result.error(ErrorCode.getActivityFailed, ErrorMessage.invalidPresentationContext, null)
       return
     }
     block(activity)

@@ -1,4 +1,4 @@
-package com.example.pointpub_sdk
+package kr.pointpub_sdk
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -17,7 +17,7 @@ import kr.pointpub.sdk.external.OfferWallListener
 import kr.pointpub.sdk.external.VirtualPointListener
 
 /** PointPubSDKPlugin */
-class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler, ActivityAware {
+final class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler, ActivityAware {
 
   private object Methods {
     const val SET_APP_ID = "setAppId"

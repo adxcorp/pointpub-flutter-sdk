@@ -1,4 +1,4 @@
-group = "com.example.pointpub_sdk"
+group = "kr.pointpub_sdk"
 version = "1.0-SNAPSHOT"
 
 buildscript {
@@ -18,7 +18,7 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://jitpack.io"} // 추가
+        maven { url "https://jitpack.io"}
     }
 }
 
@@ -27,7 +27,7 @@ apply plugin: "kotlin-android"
 
 android {
     if (project.android.hasProperty("namespace")) {
-        namespace = "com.example.pointpub_sdk"
+        namespace = "kr.pointpub_sdk"
     }
 
     compileSdk = 36
@@ -51,7 +51,7 @@ android {
     }
 
     dependencies {
-        implementation("com.github.adxcorp:pointpub-android-sdk:2.0.0")
+        implementation("com.github.adxcorp:pointpub-android-sdk:2.0.1")
     }
 
     testOptions {

@@ -36,7 +36,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.example.pointpub_sdk
+        package: kr.pointpub_sdk
         pluginClass: PointPubSDKPlugin
       ios:
         pluginClass: PointPubSDKPlugin

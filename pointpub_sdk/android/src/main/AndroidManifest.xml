@@ -1,3 +1,3 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.example.pointpub_sdk">
+  package="kr.pointpub_sdk">
 </manifest>

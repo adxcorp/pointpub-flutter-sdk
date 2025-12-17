@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -11,7 +12,9 @@ final class MethodChannelPointPubSDK extends PointPubSDKPlatform {
 
   @override
   Future<void> checkTrackingAndRequestIfNeeded() async {
-    await methodChannel.invokeMethod("checkTrackingAndRequestIfNeeded");
+    if (Platform.isIOS) {
+      await methodChannel.invokeMethod("checkTrackingAndRequestIfNeeded");
+    }
   }
 
   @override

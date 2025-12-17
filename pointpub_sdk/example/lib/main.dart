@@ -1,129 +1,100 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:io' show Platform;
+import 'point_pub_service.dart';
 
-import 'package:pointpub_sdk/pointpub_sdk.dart';
-import 'package:pointpub_sdk_example/ActionButton.dart';
+class ActionItem {
+  final String label;
+  final VoidCallback onPressed;
+  ActionItem({required this.label, required this.onPressed});
+}
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final PointPubSDK _pointpubSdk = PointPubSDK();
-  final ButtonStyle _buttonStyle = ElevatedButton.styleFrom(
-    padding: const EdgeInsets.symmetric(vertical: 20),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-  );
-  late final List<ActionItem> _buttons;
-
-  @override
-  void initState() {
-    super.initState();
-    setActionButtonItems();
-    setPointPubSDK();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  void setActionButtonItems() {
-    _buttons = [
-      ActionItem(
-        label: '오퍼월 시작하기',
-        onPressed: () {
-          startOfferWall();
-        },
-      ),
-      ActionItem(
-        label: '포인트 가져오기',
-        onPressed: () {
-          getVirtualPoint();
-        },
-      ),
-      ActionItem(
-        label: '포인트 사용하기',
-        onPressed: () {
-          spendVirtualPoint(10);
-        },
-      ),
-      ActionItem(
-        label: '완료된 캠페인 가져오기',
-        onPressed: () {
-          getCompletedCampaign();
-        },
-      ),
-    ];
-  }
-
-  Future<void> setPointPubSDK() async {
-    await _pointpubSdk.setAppId("APP_17569663893761798");
-    await _pointpubSdk.setUserId("123456789");
-
-    if (Platform.isIOS) {
-      await _pointpubSdk.checkTrackingAndRequestIfNeeded();
-    }
-  }
-
-  Future<void> startOfferWall() async {
-    await _pointpubSdk.startOfferWall();
-  }
-
-  Future<void> getVirtualPoint() async {
-    final result = await _pointpubSdk.getVirtualPoint();
-    print('포인트명: ${result["pointName"]}, 남은 포인트: ${result["point"]}');
-  }
-
-  Future<void> spendVirtualPoint(int point) async {
-    final result = await _pointpubSdk.spendVirtualPoint(point);
-    print('포인트명: ${result["pointName"]}, 사용 후 남은 포인트: ${result["point"]}');
-  }
-
-  Future<void> getCompletedCampaign() async {
-    final result = await _pointpubSdk.getCompletedCampaign();
-    print(result);
-  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('PointPubSDK Example App'),
-        ),
-        body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: _buttonListWidget(),
-            )
-        ),
-      ),
+      title: 'PointPub Plugin Example',
+      theme: ThemeData(useMaterial3: true),
+      home: const PointPubHome(),
     );
   }
+}
 
-  Widget _buttonListWidget() {
-    return ListView.separated(
-      itemCount: _buttons.length,
-      separatorBuilder: (_, _) => const SizedBox(height: 16),
-      itemBuilder: (context, index) {
-        final item = _buttons[index];
-        return ActionButton(
-          label: item.label,
-          onPressed: item.onPressed,
-          style: _buttonStyle,
-        );
-      },
+class PointPubHome extends StatefulWidget {
+  const PointPubHome({super.key});
+
+  @override
+  State<PointPubHome> createState() => _PointPubHomeState();
+}
+
+class _PointPubHomeState extends State<PointPubHome> {
+  final PointPubService _service = PointPubService();
+  bool _isInitialized = false;
+  static final ButtonStyle _buttonStyle = ElevatedButton.styleFrom(
+    padding: const EdgeInsets.symmetric(vertical: 20),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  Future<void> _init() async {
+    final success = await _service.initialize();
+    if (mounted) {
+      setState(() => _isInitialized = success);
+    }
+  }
+
+  List<ActionItem> get _buttons => [
+    ActionItem(
+      label: '오퍼월 시작하기',
+      onPressed: () => _service.startOfferWall(),
+    ),
+    ActionItem(
+      label: '포인트 가져오기',
+      onPressed: () => _service.getVirtualPoint(),
+    ),
+    ActionItem(
+      label: '포인트 사용하기',
+      onPressed: () => _service.spendVirtualPoint(10),
+    ),
+    ActionItem(
+      label: '완료된 캠페인 가져오기',
+      onPressed: () => _service.getCompletedCampaign(),
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('PointPub Demo App')),
+      body: SafeArea(
+        child: !_isInitialized
+            ? const Center(child: CircularProgressIndicator())
+            : Padding(
+          padding: const EdgeInsets.all(20),
+          child: ListView.separated(
+            itemCount: _buttons.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 16),
+            itemBuilder: (context, index) {
+              final item = _buttons[index];
+              return ElevatedButton(
+                onPressed: item.onPressed,
+                style: _buttonStyle,
+                child: Text(item.label),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }

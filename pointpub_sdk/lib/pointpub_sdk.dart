@@ -1,10 +1,9 @@
 
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-
 import 'pointpub_sdk_platform_interface.dart';
+import 'dart:developer';
 
 final class PointPubSDK with WidgetsBindingObserver {
 
@@ -12,6 +11,7 @@ final class PointPubSDK with WidgetsBindingObserver {
   static final PointPubSDK _instance = PointPubSDK._internal();
   factory PointPubSDK() => _instance;
   StreamSubscription? _subscription;
+  static const String _logName = 'PointPub_Plugin';
 
   PointPubSDK._internal() {
     WidgetsBinding.instance.addObserver(this);
@@ -44,17 +44,17 @@ final class PointPubSDK with WidgetsBindingObserver {
 
       switch (type) {
         case "onOpenOfferWall":
-          print("[PointPub] OfferWall opened");
+          log("OfferWall opened", name: _logName);
         case "onCloseOfferWall":
-          print("[PointPub] OfferWall closed");
+          log("OfferWall closed", name: _logName);
         default:
-          print("[PointPub] unknown event: $type");
+          log("unknown event: $type", name: _logName);
       }
     }
   }
 
   void _onError(Object error) {
-    print("[PointPub] EventChannel error: $error");
+    log("[PointPub] EventChannel error: $error");
   }
 
   Future<void> checkTrackingAndRequestIfNeeded() {

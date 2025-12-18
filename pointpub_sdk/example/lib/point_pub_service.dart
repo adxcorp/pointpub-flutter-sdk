@@ -5,7 +5,7 @@ import 'dart:developer';
 import 'package:pointpub_sdk/pointpub_sdk.dart';
 
 class PointPubService {
-  final PointPubSDK _sdk = PointPubSDK();
+  PointPubSDK get _sdk => PointPubSDK.instance;
   static const String _logName = 'PointPub_Plugin';
 
   // 초기화

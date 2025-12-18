@@ -7,11 +7,11 @@ import 'pointpub_sdk_platform_interface.dart';
 
 final class PointPubSDK with WidgetsBindingObserver {
   static const EventChannel _eventChannel = EventChannel('pointpub_sdk/events');
-  static final PointPubSDK _instance = PointPubSDK._internal();
-  factory PointPubSDK() => _instance;
-  StreamSubscription? _subscription;
   static const String _logName = 'PointPub_Plugin';
+  static final PointPubSDK _instance = PointPubSDK._internal();
+  static PointPubSDK get instance => _instance;
 
+  StreamSubscription? _subscription;
   VoidCallback? _onOpenCallback;
   VoidCallback? _onCloseCallback;
 

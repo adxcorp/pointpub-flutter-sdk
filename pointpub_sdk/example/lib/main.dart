@@ -54,23 +54,23 @@ class _PointPubHomeState extends State<PointPubHome> {
   }
 
   List<ActionItem> get _buttons => [
-    ActionItem(
-      label: '오퍼월 시작하기',
-      onPressed: () => _service.startOfferWall(),
-    ),
-    ActionItem(
-      label: '포인트 가져오기',
-      onPressed: () => _service.getVirtualPoint(),
-    ),
-    ActionItem(
-      label: '포인트 사용하기',
-      onPressed: () => _service.spendVirtualPoint(10),
-    ),
-    ActionItem(
-      label: '완료된 캠페인 가져오기',
-      onPressed: () => _service.getCompletedCampaign(),
-    ),
-  ];
+        ActionItem(
+          label: '오퍼월 시작하기',
+          onPressed: () => _service.startOfferWall(),
+        ),
+        ActionItem(
+          label: '포인트 가져오기',
+          onPressed: () => _service.getVirtualPoint(),
+        ),
+        ActionItem(
+          label: '포인트 사용하기',
+          onPressed: () => _service.spendVirtualPoint(10),
+        ),
+        ActionItem(
+          label: '완료된 캠페인 가져오기',
+          onPressed: () => _service.getCompletedCampaign(),
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -80,20 +80,20 @@ class _PointPubHomeState extends State<PointPubHome> {
         child: !_isInitialized
             ? const Center(child: CircularProgressIndicator())
             : Padding(
-          padding: const EdgeInsets.all(20),
-          child: ListView.separated(
-            itemCount: _buttons.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 16),
-            itemBuilder: (context, index) {
-              final item = _buttons[index];
-              return ElevatedButton(
-                onPressed: item.onPressed,
-                style: _buttonStyle,
-                child: Text(item.label),
-              );
-            },
-          ),
-        ),
+                padding: const EdgeInsets.all(20),
+                child: ListView.separated(
+                  itemCount: _buttons.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 16),
+                  itemBuilder: (context, index) {
+                    final item = _buttons[index];
+                    return ElevatedButton(
+                      onPressed: item.onPressed,
+                      style: _buttonStyle,
+                      child: Text(item.label),
+                    );
+                  },
+                ),
+              ),
       ),
     );
   }

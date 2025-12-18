@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'pointpub_sdk_platform_interface.dart';
 
 final class PointPubSDK with WidgetsBindingObserver {
-
   static const EventChannel _eventChannel = EventChannel('pointpub_sdk/events');
   static final PointPubSDK _instance = PointPubSDK._internal();
   factory PointPubSDK() => _instance;
@@ -31,9 +29,9 @@ final class PointPubSDK with WidgetsBindingObserver {
 
   void _startListening() {
     _subscription ??= _eventChannel.receiveBroadcastStream().listen(
-      _onEvent,
-      onError: _onError,
-    );
+          _onEvent,
+          onError: _onError,
+        );
   }
 
   void _disposeInternal() {
@@ -77,10 +75,7 @@ final class PointPubSDK with WidgetsBindingObserver {
     return PointPubSDKPlatform.instance.setUserId(userId);
   }
 
-  Future<void> startOfferWall({
-    VoidCallback? onOpen,
-    VoidCallback? onClose
-  }) {
+  Future<void> startOfferWall({VoidCallback? onOpen, VoidCallback? onClose}) {
     _onOpenCallback = onOpen;
     _onCloseCallback = onClose;
     return PointPubSDKPlatform.instance.startOfferWall();

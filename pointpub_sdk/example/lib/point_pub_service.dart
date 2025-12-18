@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:io' show Platform;
 import 'dart:developer';
@@ -41,7 +40,8 @@ class PointPubService {
     try {
       final result = await _sdk.getVirtualPoint();
       if (result.isNotEmpty) {
-        log('포인트명: ${result["pointName"]}, 남은 포인트: ${result["point"]}', name: _logName);
+        log('포인트명: ${result["pointName"]}, 남은 포인트: ${result["point"]}',
+            name: _logName);
       }
     } catch (e) {
       log('포인트 조회 실패', name: _logName, error: e);
@@ -53,7 +53,8 @@ class PointPubService {
     try {
       final result = await _sdk.spendVirtualPoint(point);
       if (result.isNotEmpty) {
-        log('포인트명: ${result["pointName"]}, 사용 후 남은 포인트: ${result["point"]}', name: _logName);
+        log('포인트명: ${result["pointName"]}, 사용 후 남은 포인트: ${result["point"]}',
+            name: _logName);
       }
     } catch (e) {
       log('포인트 사용 실패', name: _logName, error: e);

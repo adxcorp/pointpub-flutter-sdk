@@ -24,7 +24,8 @@ abstract class PointPubSDKPlatform extends PlatformInterface {
   }
 
   Future<void> checkTrackingAndRequestIfNeeded() {
-    throw UnimplementedError('checkTrackingAndRequestIfNeeded() has not been implemented.');
+    throw UnimplementedError(
+        'checkTrackingAndRequestIfNeeded() has not been implemented.');
   }
 
   Future<void> setAppId(String appId) {
@@ -48,6 +49,7 @@ abstract class PointPubSDKPlatform extends PlatformInterface {
   }
 
   Future<String> getCompletedCampaign() {
-    throw UnimplementedError('getCompletedCampaign() has not been implemented.');
+    throw UnimplementedError(
+        'getCompletedCampaign() has not been implemented.');
   }
 }

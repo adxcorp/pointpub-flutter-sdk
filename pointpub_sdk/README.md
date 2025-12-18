@@ -1,6 +1,6 @@
 # pointpub_sdk
 
-A new Flutter plugin project.
+PointPub Flutter Plugin for Android and iOS
 
 ## Getting Started
 

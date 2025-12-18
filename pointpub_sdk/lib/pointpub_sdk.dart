@@ -50,10 +50,8 @@ final class PointPubSDK with WidgetsBindingObserver {
 
       switch (type) {
         case "onOpenOfferWall":
-          log("OfferWall opened", name: _logName);
           _onOpenCallback?.call();
         case "onCloseOfferWall":
-          log("OfferWall closed", name: _logName);
           _onCloseCallback?.call();
           _onOpenCallback = null;
           _onCloseCallback = null;

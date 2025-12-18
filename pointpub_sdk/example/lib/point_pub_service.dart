@@ -7,7 +7,7 @@ import 'package:pointpub_sdk/pointpub_sdk.dart';
 
 class PointPubService {
   final PointPubSDK _sdk = PointPubSDK();
-  static const String _logName = '[PointPub_Dart]';
+  static const String _logName = 'PointPub_Plugin';
 
   // 초기화
   Future<bool> initialize() async {
@@ -29,7 +29,11 @@ class PointPubService {
 
   // 오퍼월 실행
   Future<void> startOfferWall() async {
-    await _sdk.startOfferWall();
+    await _sdk.startOfferWall(onOpen: () {
+      log('오퍼월 화면 열림', name: _logName);
+    }, onClose: () {
+      log('오퍼월 화면 닫힘', name: _logName);
+    });
   }
 
   // 포인트 조회

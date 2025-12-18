@@ -1,9 +1,10 @@
 
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+
 import 'pointpub_sdk_platform_interface.dart';
-import 'dart:developer';
 
 final class PointPubSDK with WidgetsBindingObserver {
 
@@ -12,6 +13,9 @@ final class PointPubSDK with WidgetsBindingObserver {
   factory PointPubSDK() => _instance;
   StreamSubscription? _subscription;
   static const String _logName = 'PointPub_Plugin';
+
+  VoidCallback? _onOpenCallback;
+  VoidCallback? _onCloseCallback;
 
   PointPubSDK._internal() {
     WidgetsBinding.instance.addObserver(this);
@@ -36,6 +40,8 @@ final class PointPubSDK with WidgetsBindingObserver {
     _subscription?.cancel();
     _subscription = null;
     WidgetsBinding.instance.removeObserver(this);
+    _onOpenCallback = null;
+    _onCloseCallback = null;
   }
 
   void _onEvent(dynamic event) {
@@ -45,8 +51,12 @@ final class PointPubSDK with WidgetsBindingObserver {
       switch (type) {
         case "onOpenOfferWall":
           log("OfferWall opened", name: _logName);
+          _onOpenCallback?.call();
         case "onCloseOfferWall":
           log("OfferWall closed", name: _logName);
+          _onCloseCallback?.call();
+          _onOpenCallback = null;
+          _onCloseCallback = null;
         default:
           log("unknown event: $type", name: _logName);
       }
@@ -69,7 +79,12 @@ final class PointPubSDK with WidgetsBindingObserver {
     return PointPubSDKPlatform.instance.setUserId(userId);
   }
 
-  Future<void> startOfferWall() {
+  Future<void> startOfferWall({
+    VoidCallback? onOpen,
+    VoidCallback? onClose
+  }) {
+    _onOpenCallback = onOpen;
+    _onCloseCallback = onClose;
     return PointPubSDKPlatform.instance.startOfferWall();
   }
 

@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'point_pub_service.dart';
 
-class ActionItem {
-  final String label;
-  final VoidCallback onPressed;
-  ActionItem({required this.label, required this.onPressed});
-}
-
 void main() {
   runApp(const MyApp());
 }
@@ -22,6 +16,12 @@ class MyApp extends StatelessWidget {
       home: const PointPubHome(),
     );
   }
+}
+
+class ActionItem {
+  final String label;
+  final VoidCallback onPressed;
+  ActionItem({required this.label, required this.onPressed});
 }
 
 class PointPubHome extends StatefulWidget {

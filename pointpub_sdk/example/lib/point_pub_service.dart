@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:io' show Platform;
 import 'dart:developer';
+
 import 'package:pointpub_sdk/pointpub_sdk.dart';
 
 class PointPubService {

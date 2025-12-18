@@ -7,11 +7,11 @@ Pod::Spec.new do |s|
   s.version          = '0.0.1'
   s.summary          = 'PointPub plugin for Flutter'
   s.description      = <<-DESC
-PointPub plugin for Flutter
+"A Flutter OfferWall SDK for Android and iOS that enables apps to show reward-based campaigns and manage virtual points through a unified cross-platform API."
                        DESC
   s.homepage         = 'https://github.com/adxcorp/pointpub-flutter-sdk'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Neptune Company' => 'email@example.com' }
+  s.author           = "Neptune Company"
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'

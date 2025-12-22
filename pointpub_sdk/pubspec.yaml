@@ -1,7 +1,7 @@
 name: pointpub_sdk
 description: "A Flutter OfferWall SDK for Android and iOS that enables apps to show reward-based campaigns and manage virtual points through a unified cross-platform API."
 version: 1.0.0
-homepage: https://github.com/adxcorp/pointpub-flutter-sdk
+homepage: https://neptunecompany.kr/platform
 repository: https://github.com/adxcorp/pointpub-flutter-sdk
 
 environment:

@@ -4,7 +4,7 @@
 
 ## 0.0.2
 
-* Update PointPub SDK structure
+* PointPub Flutter SDK 구조 수정
 
 ## 0.0.1
 

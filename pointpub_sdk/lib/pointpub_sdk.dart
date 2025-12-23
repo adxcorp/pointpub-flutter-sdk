@@ -96,8 +96,4 @@ final class PointPubSDK with WidgetsBindingObserver {
   Future<Map<String, dynamic>> spendVirtualPoint(int point) {
     return PointPubSDKPlatform.instance.spendVirtualPoint(point);
   }
-
-  Future<String> getCompletedCampaign() {
-    return PointPubSDKPlatform.instance.getCompletedCampaign();
-  }
 }

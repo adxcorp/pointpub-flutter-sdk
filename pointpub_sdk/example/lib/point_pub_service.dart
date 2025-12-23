@@ -60,14 +60,4 @@ class PointPubService {
       log('포인트 사용 실패', name: _logName, error: e);
     }
   }
-
-  // 완료된 캠페인 조회
-  Future<void> getCompletedCampaign() async {
-    try {
-      final result = await _sdk.getCompletedCampaign();
-      log('완료 캠페인: $result', name: _logName);
-    } catch (e) {
-      log('캠페인 조회 실패', name: _logName, error: e);
-    }
-  }
 }

@@ -26,7 +26,6 @@ final class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.S
     const val START_OFFER_WALL = "startOfferWall"
     const val GET_VIRTUAL_POINT = "getVirtualPoint"
     const val SPEND_VIRTUAL_POINT = "spendVirtualPoint"
-    const val GET_COMPLETED_CAMPAIGN = "getCompletedCampaign"
   }
 
   private object ErrorCode {
@@ -35,7 +34,6 @@ final class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.S
     const val GET_ACTIVITY_FAILED = "GET_ACTIVITY_FAILED"
     const val GET_VIRTUAL_POINT_FAILED = "GET_VIRTUAL_POINT_FAILED"
     const val SPEND_VIRTUAL_POINT_FAILED = "SPEND_VIRTUAL_POINT_FAILED"
-    const val GET_COMPLETED_CAMPAIGN_FAILED = "GET_COMPLETED_CAMPAIGN_FAILED"
   }
 
   private object ErrorMessage {
@@ -143,18 +141,6 @@ final class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.S
 
           override fun onFailure(reason: String) {
             result.error(ErrorCode.SPEND_VIRTUAL_POINT_FAILED, reason, null)
-          }
-        })
-      }
-
-      Methods.GET_COMPLETED_CAMPAIGN -> withActivity(result) { activity ->
-        PointPub.getParticipation(activity, apiInterface = object : ApiInterface {
-          override fun onResponse(code: Int, data: String) {
-            if (code == 0) {
-              result.success(data)
-            } else {
-              result.error(ErrorCode.GET_COMPLETED_CAMPAIGN_FAILED, data, null)
-            }
           }
         })
       }

@@ -65,15 +65,4 @@ final class MethodChannelPointPubSDK extends PointPubSDKPlatform {
       throw Exception(e.message);
     }
   }
-
-  @override
-  Future<String> getCompletedCampaign() async {
-    try {
-      final completedCampaign =
-          await methodChannel.invokeMethod("getCompletedCampaign");
-      return completedCampaign;
-    } on PlatformException catch (e) {
-      throw Exception(e.message);
-    }
-  }
 }

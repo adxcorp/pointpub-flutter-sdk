@@ -47,9 +47,4 @@ abstract class PointPubSDKPlatform extends PlatformInterface {
   Future<Map<String, dynamic>> spendVirtualPoint(int point) {
     throw UnimplementedError('spendVirtualPoint() has not been implemented.');
   }
-
-  Future<String> getCompletedCampaign() {
-    throw UnimplementedError(
-        'getCompletedCampaign() has not been implemented.');
-  }
 }

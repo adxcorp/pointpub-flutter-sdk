@@ -42,7 +42,6 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     case startOfferWall = "startOfferWall"
     case getVirtualPoint = "getVirtualPoint"
     case spendVirtualPoint = "spendVirtualPoint"
-    case getCompletedCampaign = "getCompletedCampaign"
   }
   
   // MARK: - Constants
@@ -53,7 +52,6 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     static let startOfferwallFailed = "START_OFFERWALL_FAILED"
     static let getVirtualPointFailed = "GET_VIRTUAL_POINT_FAILED"
     static let spendVirtualPointFailed = "SPEND_VIRTUAL_POINT_FAILED"
-    static let getCompletedCampaignFailed = "GET_COMPLETED_CAMPAIGN_FAILED"
   }
   
   private enum ErrorMessage {
@@ -178,12 +176,6 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
       runAsync(result, errorCode: ErrorCode.spendVirtualPointFailed) {
         let (pointName, remainingPoint) = try await PointPub.spendVirtualPoint(point: point)
         return ["pointName": pointName, "point": remainingPoint]
-      }
-
-    case .getCompletedCampaign:
-      runAsync(result, errorCode: ErrorCode.getCompletedCampaignFailed) {
-        let jsonString = try await PointPub.getCompletedCampaign()
-        return jsonString
       }
     }
   }

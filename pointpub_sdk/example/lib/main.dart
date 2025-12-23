@@ -66,10 +66,6 @@ class _PointPubHomeState extends State<PointPubHome> {
           label: '포인트 사용하기',
           onPressed: () => _service.spendVirtualPoint(10),
         ),
-        ActionItem(
-          label: '완료된 캠페인 가져오기',
-          onPressed: () => _service.getCompletedCampaign(),
-        ),
       ];
 
   @override

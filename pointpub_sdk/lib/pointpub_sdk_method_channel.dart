@@ -36,9 +36,10 @@ final class MethodChannelPointPubSDK extends PointPubSDKPlatform {
   }
 
   @override
-  Future<void> startOfferWall() async {
+  Future<void> startOfferWall(String pluginVersion, String sdkVersion) async {
     try {
-      return await methodChannel.invokeMethod("startOfferWall");
+      return await methodChannel.invokeMethod("startOfferWall",
+          {'pluginVersion': pluginVersion, "sdkVersion": sdkVersion});
     } on PlatformException catch (e) {
       throw Exception(e.message);
     }

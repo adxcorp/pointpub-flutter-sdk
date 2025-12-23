@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'pointpub_sdk_platform_interface.dart';
+import 'pointpub_sdk_version.dart';
 
 final class PointPubSDK with WidgetsBindingObserver {
   static const EventChannel _eventChannel = EventChannel('pointpub_sdk/events');
@@ -78,7 +80,13 @@ final class PointPubSDK with WidgetsBindingObserver {
   Future<void> startOfferWall({VoidCallback? onOpen, VoidCallback? onClose}) {
     _onOpenCallback = onOpen;
     _onCloseCallback = onClose;
-    return PointPubSDKPlatform.instance.startOfferWall();
+    if (Platform.isIOS) {
+      return PointPubSDKPlatform.instance
+          .startOfferWall(PointPubSDKVersion.plugin, PointPubSDKVersion.ios);
+    } else {
+      return PointPubSDKPlatform.instance.startOfferWall(
+          PointPubSDKVersion.plugin, PointPubSDKVersion.android);
+    }
   }
 
   Future<Map<String, dynamic>> getVirtualPoint() {

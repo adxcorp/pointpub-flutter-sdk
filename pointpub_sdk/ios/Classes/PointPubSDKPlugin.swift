@@ -1,5 +1,8 @@
-import Flutter
+
+import os
 import UIKit
+
+import Flutter
 import PointPubSDK
 
 // MARK: - PointPubSDKListener
@@ -39,7 +42,6 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     case startOfferWall = "startOfferWall"
     case getVirtualPoint = "getVirtualPoint"
     case spendVirtualPoint = "spendVirtualPoint"
-    case getCompletedCampaign = "getCompletedCampaign"
   }
   
   // MARK: - Constants
@@ -50,22 +52,24 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     static let startOfferwallFailed = "START_OFFERWALL_FAILED"
     static let getVirtualPointFailed = "GET_VIRTUAL_POINT_FAILED"
     static let spendVirtualPointFailed = "SPEND_VIRTUAL_POINT_FAILED"
-    static let getCompletedCampaignFailed = "GET_COMPLETED_CAMPAIGN_FAILED"
   }
   
   private enum ErrorMessage {
-    static let missingAppId = "[PointPub] Missing appId: The 'appId' argument was not provided or is empty"
-    static let missingUserId = "[PointPub] Missing userId: The 'userId' argument was not provided or is empty"
-    static let invalidPresentationContext = "[PointPub] Invalid presentation context: rootViewController is nil or not attached to a window. Call startOfferWall after the app’s window and rootViewController are set"
-    static let missingPoint = "[PointPub] Missing point: The 'point' argument was not provided or is empty. Pass a positive integer value for 'point' to spendVirtualPoint"
+    static let missingAppId = "[PointPub_Plugin] Missing appId: The 'appId' argument was not provided or is empty"
+    static let missingUserId = "[PointPub_Plugin] Missing userId: The 'userId' argument was not provided or is empty"
+    static let invalidPresentationContext = "[PointPub_Plugin] Invalid presentation context: rootViewController is nil or not attached to a window. Call startOfferWall after the app’s window and rootViewController are set"
+    static let missingPoint = "[PointPub_Plugin] Missing point: The 'point' argument was not provided or is empty. Pass a positive integer value for 'point' to spendVirtualPoint"
   }
     
   // MARK: - Properties
   
   private static let channelName = "pointpub_sdk"
   private static let eventChannelName = "pointpub_sdk/events"
+  private final let logName: String = "[PointPub_Plugin]"
   private var eventSink: FlutterEventSink?
   private var pointpubListener: PointPubSDKListener?
+  private var appId: String = ""
+  private var userId: String = ""
   
   // MARK: - Init
   
@@ -110,6 +114,8 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
   // MARK: - Method Channel
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    os_log("%{public}@ call.method: %{public}@", logName, call.method)
+
     guard let method = PointPubAPI(rawValue: call.method) else {
       result(FlutterMethodNotImplemented)
       return
@@ -128,6 +134,7 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
         sendErrorOnMain(result, code: ErrorCode.setAppIdFailed, message: ErrorMessage.missingAppId)
         return
       }
+      self.appId = appId
       PointPub.setAppId(with: appId)
       sendResultOnMain(result, value: nil)
 
@@ -136,6 +143,7 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
         sendErrorOnMain(result, code: ErrorCode.setUserIdFailed, message: ErrorMessage.missingUserId)
         return
       }
+      self.userId = userId
       PointPub.setUserId(with: userId)
       sendResultOnMain(result, value: nil)
 
@@ -144,6 +152,13 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
         sendErrorOnMain(result, code: ErrorCode.startOfferwallFailed, message: ErrorMessage.invalidPresentationContext)
         return
       }
+      
+      if let pluginVersion: String = extract(call, key: "pluginVersion"),
+         let sdkVersion: String = extract(call, key: "sdkVersion")
+      {
+        os_log("%{public}@ PointPub Flutter Version: %{public}@, PointPub SDK Version: %{public}@, AppId: %{public}@, UserId: %{public}@", logName, pluginVersion, sdkVersion, appId, userId)
+      }
+      
       PointPub.startOfferwall(from: presenter)
       sendResultOnMain(result, value: nil)
 
@@ -161,12 +176,6 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
       runAsync(result, errorCode: ErrorCode.spendVirtualPointFailed) {
         let (pointName, remainingPoint) = try await PointPub.spendVirtualPoint(point: point)
         return ["pointName": pointName, "point": remainingPoint]
-      }
-
-    case .getCompletedCampaign:
-      runAsync(result, errorCode: ErrorCode.getCompletedCampaignFailed) {
-        let jsonString = try await PointPub.getCompletedCampaign()
-        return jsonString
       }
     }
   }

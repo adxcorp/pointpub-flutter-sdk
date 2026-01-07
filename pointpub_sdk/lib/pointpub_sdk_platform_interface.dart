@@ -36,7 +36,7 @@ abstract class PointPubSDKPlatform extends PlatformInterface {
     throw UnimplementedError('setUserId() has not been implemented.');
   }
 
-  Future<void> startOfferWall() {
+  Future<void> startOfferWall(String pluginVersion, String sdkVersion) {
     throw UnimplementedError('startOfferWall() has not been implemented.');
   }
 
@@ -46,10 +46,5 @@ abstract class PointPubSDKPlatform extends PlatformInterface {
 
   Future<Map<String, dynamic>> spendVirtualPoint(int point) {
     throw UnimplementedError('spendVirtualPoint() has not been implemented.');
-  }
-
-  Future<String> getCompletedCampaign() {
-    throw UnimplementedError(
-        'getCompletedCampaign() has not been implemented.');
   }
 }

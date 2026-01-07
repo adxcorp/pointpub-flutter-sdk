@@ -36,9 +36,10 @@ final class MethodChannelPointPubSDK extends PointPubSDKPlatform {
   }
 
   @override
-  Future<void> startOfferWall() async {
+  Future<void> startOfferWall(String pluginVersion, String sdkVersion) async {
     try {
-      return await methodChannel.invokeMethod("startOfferWall");
+      return await methodChannel.invokeMethod("startOfferWall",
+          {'pluginVersion': pluginVersion, "sdkVersion": sdkVersion});
     } on PlatformException catch (e) {
       throw Exception(e.message);
     }
@@ -60,17 +61,6 @@ final class MethodChannelPointPubSDK extends PointPubSDKPlatform {
       final virtualPoint = await methodChannel
           .invokeMethod("spendVirtualPoint", {"point": point});
       return Map<String, dynamic>.from(virtualPoint);
-    } on PlatformException catch (e) {
-      throw Exception(e.message);
-    }
-  }
-
-  @override
-  Future<String> getCompletedCampaign() async {
-    try {
-      final completedCampaign =
-          await methodChannel.invokeMethod("getCompletedCampaign");
-      return completedCampaign;
     } on PlatformException catch (e) {
       throw Exception(e.message);
     }

@@ -36,6 +36,10 @@ abstract class PointPubSDKPlatform extends PlatformInterface {
     throw UnimplementedError('setUserId() has not been implemented.');
   }
 
+  Future<void> setCallbackParameter(String callback) {
+    throw UnimplementedError('setCallbackParameter() has not been implemented.');
+  }
+
   Future<void> startOfferWall(String pluginVersion, String sdkVersion) {
     throw UnimplementedError('startOfferWall() has not been implemented.');
   }

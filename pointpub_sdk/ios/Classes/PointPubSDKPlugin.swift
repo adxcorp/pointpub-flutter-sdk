@@ -39,6 +39,7 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
     case checkTrackingAndRequestIfNeeded = "checkTrackingAndRequestIfNeeded"
     case setAppId = "setAppId"
     case setUserId = "setUserId"
+    case setCallbackParameter = "setCallbackParameter"
     case startOfferWall = "startOfferWall"
     case getVirtualPoint = "getVirtualPoint"
     case spendVirtualPoint = "spendVirtualPoint"
@@ -49,6 +50,7 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
   private enum ErrorCode {
     static let setAppIdFailed = "SET_APP_ID_FAILED"
     static let setUserIdFailed = "SET_USER_ID_FAILED"
+    static let setCallbackParameterFailed = "SET_CALLBACK_PARAMETER_FAILED"
     static let startOfferwallFailed = "START_OFFERWALL_FAILED"
     static let getVirtualPointFailed = "GET_VIRTUAL_POINT_FAILED"
     static let spendVirtualPointFailed = "SPEND_VIRTUAL_POINT_FAILED"
@@ -57,6 +59,7 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
   private enum ErrorMessage {
     static let missingAppId = "[PointPub_Plugin] Missing appId: The 'appId' argument was not provided or is empty"
     static let missingUserId = "[PointPub_Plugin] Missing userId: The 'userId' argument was not provided or is empty"
+    static let missingCallbackParameter = "[PointPub_Plugin] Missing callback parameter: The 'callback' argument was not provided or is empty"
     static let invalidPresentationContext = "[PointPub_Plugin] Invalid presentation context: rootViewController is nil or not attached to a window. Call startOfferWall after the app’s window and rootViewController are set"
     static let missingPoint = "[PointPub_Plugin] Missing point: The 'point' argument was not provided or is empty. Pass a positive integer value for 'point' to spendVirtualPoint"
   }
@@ -145,6 +148,14 @@ public final class PointPubSDKPlugin: NSObject, FlutterPlugin, FlutterStreamHand
       }
       self.userId = userId
       PointPub.setUserId(with: userId)
+      sendResultOnMain(result, value: nil)
+
+    case .setCallbackParameter:
+      guard let callback: String = extract(call, key: "callback"), !callback.isEmpty else {
+        sendErrorOnMain(result, code: ErrorCode.setCallbackParameterFailed, message: ErrorMessage.missingCallbackParameter)
+        return
+      }
+      PointPub.setCallbackParameter(with: callback)
       sendResultOnMain(result, value: nil)
 
     case .startOfferWall:

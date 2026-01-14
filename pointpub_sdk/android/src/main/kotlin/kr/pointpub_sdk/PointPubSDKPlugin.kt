@@ -23,6 +23,7 @@ final class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.S
   private object Methods {
     const val SET_APP_ID = "setAppId"
     const val SET_USER_ID = "setUserId"
+    const val SET_CALLBACK_PARAMETER = "setCallbackParameter"
     const val START_OFFER_WALL = "startOfferWall"
     const val GET_VIRTUAL_POINT = "getVirtualPoint"
     const val SPEND_VIRTUAL_POINT = "spendVirtualPoint"
@@ -31,6 +32,7 @@ final class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.S
   private object ErrorCode {
     const val SET_APP_ID_FAILED = "SET_APP_ID_FAILED"
     const val SET_USER_ID_FAILED = "SET_USER_ID_FAILED"
+    const val SET_CALLBACK_PARAMETER_FAILED = "SET_CALLBACK_PARAMETER_FAILED"
     const val GET_ACTIVITY_FAILED = "GET_ACTIVITY_FAILED"
     const val GET_VIRTUAL_POINT_FAILED = "GET_VIRTUAL_POINT_FAILED"
     const val SPEND_VIRTUAL_POINT_FAILED = "SPEND_VIRTUAL_POINT_FAILED"
@@ -39,6 +41,7 @@ final class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.S
   private object ErrorMessage {
     const val MISSING_APP_ID = "[PointPub_Plugin] Missing appId: The 'appId' argument was not provided or is empty"
     const val MISSING_USER_ID = "[PointPub_Plugin] Missing userId: The 'userId' argument was not provided or is empty"
+    const val MISSING_CALLBACK_PARAMETER = "[PointPub_Plugin] Missing callback parameter: The 'callback' argument was not provided or is empty"
     const val MISSING_POINT = "[PointPub_Plugin] Missing point: The 'point' argument was not provided or is empty. Pass a positive integer value for 'point' to spendVirtualPoint"
     const val INVALID_PRESENTATION_CONTEXT = "[PointPub_Plugin] Invalid presentation context: Activity is null or not in a valid lifecycle state. Call startOfferWall after the Activity is fully created and resumed"
   }
@@ -84,6 +87,15 @@ final class PointPubSDKPlugin : FlutterPlugin, MethodCallHandler, EventChannel.S
         }
         this.userId = userId
         PointPub.setUserId(userId)
+        result.success(null)
+      }
+
+      Methods.SET_CALLBACK_PARAMETER -> {
+        val callback = call.argument<String>("callback") ?: run {
+          result.error(ErrorCode.SET_CALLBACK_PARAMETER_FAILED, ErrorMessage.MISSING_CALLBACK_PARAMETER, null)
+          return
+        }
+        PointPub.setCallbackParameter(callback)
         result.success(null)
       }
 

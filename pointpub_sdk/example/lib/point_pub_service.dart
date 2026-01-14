@@ -18,6 +18,7 @@ class PointPubService {
         await _sdk.setAppId("APP_17259408657597018");
       }
       await _sdk.setUserId("123456789");
+      await _sdk.setCallbackParameter("[Callback Parameter]");
       log('SDK 초기화 완료', name: _logName);
       return true;
     } catch (e) {

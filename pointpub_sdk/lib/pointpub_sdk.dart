@@ -77,6 +77,10 @@ final class PointPubSDK with WidgetsBindingObserver {
     return PointPubSDKPlatform.instance.setUserId(userId);
   }
 
+  Future<void> setCallbackParameter(String callback) {
+    return PointPubSDKPlatform.instance.setCallbackParameter(callback);
+  }
+
   Future<void> startOfferWall({VoidCallback? onOpen, VoidCallback? onClose}) {
     _onOpenCallback = onOpen;
     _onCloseCallback = onClose;

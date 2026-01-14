@@ -36,6 +36,15 @@ final class MethodChannelPointPubSDK extends PointPubSDKPlatform {
   }
 
   @override
+  Future<void> setCallbackParameter(String callback) async {
+    try {
+      return await methodChannel.invokeMethod("setCallbackParameter", { 'callback': callback });
+    } on PlatformException catch (e) {
+      throw Exception(e.message);
+    }
+  }
+
+  @override
   Future<void> startOfferWall(String pluginVersion, String sdkVersion) async {
     try {
       return await methodChannel.invokeMethod("startOfferWall",

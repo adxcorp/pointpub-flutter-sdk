@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'pointpub_sdk'
-  s.version          = '1.0.2'
+  s.version          = '1.0.3'
   s.summary          = 'PointPub plugin for Flutter'
   s.description      = <<-DESC
 "A Flutter OfferWall SDK for Android and iOS that enables apps to show reward-based campaigns and manage virtual points through a unified cross-platform API."

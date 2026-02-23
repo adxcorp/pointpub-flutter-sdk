@@ -31,7 +31,7 @@ $ flutter pub add pointpub_sdk
 - or Add following dependency in pubspec.yaml.
 ```
 dependencies:
-pointpub_sdk: ^1.0.4
+pointpub_sdk: ^1.0.5
 ```
 
 - Run flutter pub get command in your project directory.
